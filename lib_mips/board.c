@@ -1301,6 +1301,7 @@ int check_image_validation(void)
 #define PIO_DIR0	0x00
 #define PIO_DIR1	0x04
 #define PIO_DATA1	0x24
+#define PIO_SET0	0x34
 #define PIO_SET1	0x34
 #define PIO_CLEAR0	0x40
 #define PIO_CLEAR1	0x44
@@ -2016,9 +2017,9 @@ __attribute__((nomips16)) void board_init_r (gd_t *id, ulong dest_addr)
 	// set GPIO44 to normal gpio
 	RALINK_REG(RALINK_SYSCTL_BASE+GPIOMODE2) |= 0x1;
 	// set GPIO44 to output
-	RALINK_REG(RALINK_PIO_BASE+PIO_DIR1) |= (1 << 12);
+	RALINK_REG(RALINK_PIO_BASE+PIO_DIR0) |= (1 << 14);
 	// set /GPIO44
-	RALINK_REG(RALINK_PIO_BASE+PIO_SET1) |= (1 << 12);
+	RALINK_REG(RALINK_PIO_BASE+PIO_SET0) |= (0 << 14);
 
 	// BUTTON
 	// set GPIO38 to normal gpio
@@ -2035,7 +2036,7 @@ __attribute__((nomips16)) void board_init_r (gd_t *id, ulong dest_addr)
 	printf("\nGPIOMODE2 --> %x\n", RALINK_REG(RALINK_SYSCTL_BASE+GPIOMODE2));
 
 	reg &= (1 << 6);
-	if (!reg) {
+	if (reg) {
 		RALINK_REG(RALINK_PIO_BASE+PIO_CLEAR1) |= (1 << 12);
 		printf("\n\nRESET BUTTON PRESSED\n");
 		timer1 = 0;
