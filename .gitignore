@@ -8,5 +8,4 @@
 *.map
 *.srec
 u-boot
-uboot.bin
 mkimage
